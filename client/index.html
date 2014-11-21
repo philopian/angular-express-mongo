@@ -123,10 +123,10 @@
 										console.log("...post status: %o",status);
 										return status;
 										if (status == 200){
-											//TODO: add this marker to the existing geojson markers ()
-											//TODO: remove this marker
-											//
-
+											// TODO: change the icon
+											console.log(".........STATUS:200 ......posted")
+										} else {
+											//TODO: remove the marker or send an error message
 										}
 									})
 									.error(function(data,status,headers,config){
@@ -135,7 +135,7 @@
 										return status;
 									});
 						}
-						var html = '<div class="container"><h4 style="text-align: center;">Add a Comment</h4><table style="width:100%"><tr><td style="text-align: right;">Subject:</td><td><input ng-model="popupSubject" type="text"/></td></tr><tr><td style="text-align: right;">Comment:</td><td><input ng-model="popupCommentText" type="text"/></td></tr></table><div class="btn btn-success" style="width: 100%; margin-top: 7px;" ng-click="sendLocation()">send location</div></div>';
+						var html = '<div class="container"><h4 style="text-align: center;">Add a Comment</h4><table style="width:100%"><tr><td style="text-align: right;">Subject:</td><td><input ng-model="popupSubject" type="text"/></td></tr><tr><td style="text-align: right;">Comment:</td><td><textarea ng-model="popupCommentText" type="text" style="margin: 0px; height: 59px; width: 135px; max-height: 100px; max-width: 135px;"/></td></tr></table><div class="btn btn-success" style="width: 100%; margin-top: 7px;" ng-click="sendLocation()">send location</div></div>';
 						var linkFunction = $compile(angular.element(html));
 						var popupScope = $scope.$new();
 						markerNewComment = L.marker([mapCenterCoors.lat,mapCenterCoors.lng],{draggable:true})
