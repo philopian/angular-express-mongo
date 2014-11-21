@@ -127,18 +127,7 @@
 
 					//--POST a marker------------
 
-					// TODO: add them to the map
-
-
-
-					$scope.title = "HEEEEEElo";
-
-
-
-
-
-
-					//--Add a comment----------------------
+					// geojson post object constructor
 					var GeojsonPostObj = function(title, textComment, lnglat){
 						this.type = "Feature";
 						this.properties = {
@@ -151,26 +140,18 @@
 						};
 					};
 
-
-
+					// ngClick event to add a marker to the center of the map and bind some angular in the popup
 					$scope.btnAddComment = function(){
 
 						// create a dragable marker in the center of the map with a popup open
 						var mapCenterCoors = map.getCenter();
 						var markerNewComment = {};
 
-
 						// bind some angular inside the marker's popup
 						$scope.sendLocation = function(){
-							console.log("send location: %f",markerNewComment._latlng.lat);
-							console.log(popupScope.commentText);
-
-
 
 							var postData = new GeojsonPostObj(popupScope.popupSubject, popupScope.popupCommentText, [markerNewComment._latlng.lng,markerNewComment._latlng.lat]);
 							console.log("data to post: %o",postData);
-
-
 
 
 							// Post the lat/lng to the database
@@ -198,11 +179,6 @@
 								.bindPopup(linkFunction(popupScope)[0], {minHeight : 300})
 								.addTo(map)
 								.openPopup();
-
-
-
-						console.log(".....map center: %o",mapCenterCoors);
-						console.log(".....markerNewComment: %o",markerNewComment._popup._contentNode.innerHTML);
 					};
 
 
