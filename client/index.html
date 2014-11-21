@@ -46,45 +46,6 @@
 		// create the module and name it myApp
 		var myApp = angular.module('myAppNameSpace', [])
 
-//				.service("CommentMarkers", function($http){
-//					var urlPost = "/api/newcomments/add";
-//					var urlGet = "/api/newcomments/";
-//
-//					return{
-//						getAllCommentMarker :function(){
-//							//return $http.get(urlGet);
-//
-//							$http.get(urlGet)
-//									.success(function(data,status,headers,config){
-//										console.log(".......SUCCUSS");
-//										console.log("...get data: %o",data);
-//										console.log("...get status: %o",status);
-//										return data;
-//									})
-//									.error(function(data,status,headers,config){
-//										console.log("...get data: %o",data);
-//										console.log("...get status: %o",status);
-//										return status;
-//									});
-//						}
-//						,
-//
-//						postNewCommentMarker :function(newCommentData){
-//							$http.post(urlPost, newCommentData)
-//									.success(function(data,status,headers,config){
-//										console.log("...post data: %o",data);
-//										console.log("...post status: %o",status);
-//										return status;
-//									})
-//									.error(function(data,status,headers,config){
-//										console.log("...post data: %o",data);
-//										console.log("...post status: %o",status);
-//										return status;
-//									});
-//						}
-//					};
-//				})//service
-
 				.controller('MainCtrl', function($scope, $compile, $http) {
 
 					// Leaflet Setup
