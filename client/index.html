@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html ng-app="myAppNameSpace">
+<head>
+	<!-- app styles -->
+	<style type="text/css">
+		body, html{
+			height: 100%; width:100%;
+		}
+		#mainUIView{
+			height: 100%; width:100%;
+		}
+
+		#map {
+			height: 100%; width:100%;
+		}
+		#buttonSec{
+			padding: 20px;
+			position: fixed;
+			bottom: 0px;
+			width:100%;
+		}
+		#btnAddComment{
+			width: 100%;
+		}
+	</style>
+
+	<!-- jquery via CDN -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+	<!-- load bootstrap and fontawesome via CDN -->
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+
+	<!-- load angular via CDN -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-route.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-resource.min.js"></script>
+
+	<!-- leaflet via CDN -->
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+	<script>
+		// create the module and name it myApp
+		var myApp = angular.module('myAppNameSpace', [])
+
+//				.service("CommentMarkers", function($http){
+//					var urlPost = "/api/newcomments/add";
+//					var urlGet = "/api/newcomments/";
+//
+//					return{
+//						getAllCommentMarker :function(){
+//							//return $http.get(urlGet);
+//
+//							$http.get(urlGet)
+//									.success(function(data,status,headers,config){
+//										console.log(".......SUCCUSS");
+//										console.log("...get data: %o",data);
+//										console.log("...get status: %o",status);
+//										return data;
+//									})
+//									.error(function(data,status,headers,config){
+//										console.log("...get data: %o",data);
+//										console.log("...get status: %o",status);
+//										return status;
+//									});
+//						}
+//						,
+//
+//						postNewCommentMarker :function(newCommentData){
+//							$http.post(urlPost, newCommentData)
+//									.success(function(data,status,headers,config){
+//										console.log("...post data: %o",data);
+//										console.log("...post status: %o",status);
+//										return status;
+//									})
+//									.error(function(data,status,headers,config){
+//										console.log("...post data: %o",data);
+//										console.log("...post status: %o",status);
+//										return status;
+//									});
+//						}
+//					};
+//				})//service
+
+				.controller('MainCtrl', function($scope, $compile, $http) {
+
+					// Leaflet Setup
+					var map = L.map('map'); // create the map object
+					L.tileLayer('https://{s}.tiles.mapbox.com/v3/examples.map-20v6611k/{z}/{x}/{y}.png').addTo(map);//add some tiles
+					map.setView([45.5,-123.600], 8);// manually set the view
+
+					// HTML5 get user's location and center the map on the user
+					//map.locate({setView: true, maxZoom: 15});
+					map.on('locationfound',function(e){
+						console.log(e);
+						console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitute, e.longitude, e.accuracy);
+
+						// once we have gotten the user's location stop locating them (save battery)
+						map.stopLocate()
+					});
+
+
+
+					//--GET all markers------------
+					var geojsonLayer = {};
+					var urlGet = "/api/newcomments/";
+					$http.get(urlGet)
+							.success(function(data,status,headers,config){
+								console.log("...get geojson data status: %o",status);
+
+								var geojsonFeature = JSON.stringify(data);
+								console.log(geojsonFeature);
+
+								geojsonLayer = L.geoJson(data, {}).addTo(map);
+							})
+							.error(function(data,status,headers,config){
+								console.log("...get data: %o",data);
+								console.log("...get status: %o",status);
+
+							});
+
+
+
+
+					//--POST a marker------------
+
+					// TODO: add them to the map
+
+
+
+					$scope.title = "HEEEEEElo";
+
+
+
+
+
+
+					//--Add a comment----------------------
+					var GeojsonPostObj = function(title, textComment, lnglat){
+						this.type = "Feature";
+						this.properties = {
+							title: title,
+							comment: textComment
+						};
+						this.geometry = {
+							type:"Point",
+							coordinates:lnglat
+						};
+					};
+
+
+
+					$scope.btnAddComment = function(){
+
+						// create a dragable marker in the center of the map with a popup open
+						var mapCenterCoors = map.getCenter();
+						var markerNewComment = {};
+
+
+						// bind some angular inside the marker's popup
+						$scope.sendLocation = function(){
+							console.log("send location: %f",markerNewComment._latlng.lat);
+							console.log(popupScope.popupCommentText);
+
+
+
+							var postData = new GeojsonPostObj(popupScope.popupSubjectText, popupScope.popupCommentText, [markerNewComment._latlng.lng,markerNewComment._latlng.lat]);
+							console.log("data to post: %o",postData);
+
+
+
+
+							// Post the lat/lng to the database
+							var urlPost = "/api/newcomments/add";
+							$http.post(urlPost,postData )
+									.success(function(data,status,headers,config){
+										console.log("...post data: %o",data);
+										console.log("...post status: %o",status);
+										return status;
+										if (status == 200){
+											//TODO: add this marker to the existing geojson markers ()
+											//TODO: change it's icon
+										}
+									})
+									.error(function(data,status,headers,config){
+										console.log("...post data: %o",data);
+										console.log("...post status: %o",status);
+										return status;
+									});
+						}
+						var html = '<div><div class="btn btn-success" ng-click="sendLocation()">send location</div><p>Title Here</p><input id="popupCommentText" ng-model="commentText" type="text"/></div>';
+						var linkFunction = $compile(angular.element(html));
+						var popupScope = $scope.$new();
+						markerNewComment = L.marker([mapCenterCoors.lat,mapCenterCoors.lng],{draggable:true})
+								.bindPopup(linkFunction(popupScope)[0], {minHeight : 300})
+								.addTo(map)
+								.openPopup();
+
+
+
+						console.log(".....map center: %o",mapCenterCoors);
+						console.log(".....markerNewComment: %o",markerNewComment._popup._contentNode.innerHTML);
+					};
+
+
+
+
+				});
+
+
+	</script>
+</head>
+
+<!-- define angular controller -->
+<body ng-controller="MainCtrl">
+
+<div id="map"></div>
+
+<div id="buttonSec">
+	<div id="btnAddComment" class="btn btn-info" ng-click="btnAddComment()">Add a Comment</div>
+</div>
+
+
+
+</body>
+</html>
