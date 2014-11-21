@@ -135,7 +135,7 @@
 										return status;
 									});
 						}
-						var html = '<div><h4>Add a Comment</h4>Subject:<input ng-model="popupSubject" type="text"/></br>Comment:<input ng-model="popupCommentText" type="text"/></br><div class="btn btn-success" ng-click="sendLocation()">send location</div></div>';
+						var html = '<div class="container"><h4 style="text-align: center;">Add a Comment</h4><table style="width:100%"><tr><td style="text-align: right;">Subject:</td><td><input ng-model="popupSubject" type="text"/></td></tr><tr><td style="text-align: right;">Comment:</td><td><input ng-model="popupCommentText" type="text"/></td></tr></table><div class="btn btn-success" style="width: 100%; margin-top: 7px;" ng-click="sendLocation()">send location</div></div>';
 						var linkFunction = $compile(angular.element(html));
 						var popupScope = $scope.$new();
 						markerNewComment = L.marker([mapCenterCoors.lat,mapCenterCoors.lng],{draggable:true})
@@ -156,5 +156,6 @@
 	<div id="buttonSec">
 		<div id="btnAddComment" class="btn btn-info" ng-click="btnAddComment()">Add a Comment</div>
 	</div>
+
 </body>
 </html>
