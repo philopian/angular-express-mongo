@@ -51,10 +51,10 @@
 					// Leaflet Setup
 					var map = L.map('map'); // create the map object
 					L.tileLayer('https://{s}.tiles.mapbox.com/v3/examples.map-20v6611k/{z}/{x}/{y}.png').addTo(map);//add some tiles
-					map.setView([45.5,-123.600], 8);// manually set the view
+					map.setView([45.52,-122.68], 11);// manually set the view
 
 					// HTML5 get user's location and center the map on the user
-					map.locate({setView: true, maxZoom: 15});
+					//map.locate({setView: true, maxZoom: 15});
 					map.on('locationfound',function(e){
 						console.log(e);
 						console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitude, e.longitude, e.accuracy);

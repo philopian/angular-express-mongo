@@ -1,6 +1,7 @@
  var path 		= require("path"); 
  var express 	= require("express");
  var db 		= require('mongodb').Db;
+ var bodyParser = require('body-parser');
 
  var app = express();
  
@@ -10,8 +11,11 @@
 var clientPath = path.resolve("..") + "/client/";
 
 
+//--middleware--------
+app.use( bodyParser.json() );// to support JSON-encoded bodies
 
-/* API */
+
+ /* API */
 app.get("/api/newcomments/", function(req, res, done){
 
 	db.connect("mongodb://localhost:27017/publicInvolvement", function(err, db) {
@@ -36,7 +40,7 @@ app.get("/api/newcomments/", function(req, res, done){
  app.post("/api/newcomments/add", function(req, res, done){
 
 
-  console.log(req.data);
+  console.log(req.body);
 
   //db.connect("mongodb://localhost:27017/publicInvolvement", function(err, db) {
   // if(err) return console.dir(err)
