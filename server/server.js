@@ -11,11 +11,16 @@
 var clientPath = path.resolve("..") + "/client/";
 
 
-//--middleware--------
+
+
+/********************** Middleware **********************/
 app.use( bodyParser.json() );// to support JSON-encoded bodies
 
 
- /* API */
+
+
+/********************** API **********************/
+// get all the comments from the database
 app.get("/api/newcomments/", function(req, res, done){
 
 	db.connect("mongodb://localhost:27017/publicInvolvement", function(err, db) {
@@ -32,65 +37,50 @@ app.get("/api/newcomments/", function(req, res, done){
 
 	        res.send(geoJsonObj);
 	        done();
-	    });
+	    });//find
 		
-	});
+	});//db-connection
 
-});
- app.post("/api/newcomments/add", function(req, res, done){
+});//get
 
+// post a new comment to the database
+app.post("/api/newcomments/add", function(req, res, done){
 
-  console.log(req.body);
+  // get the new comment data
+  var newCommentToAdd = req.body;
 
-  //db.connect("mongodb://localhost:27017/publicInvolvement", function(err, db) {
-  // if(err) return console.dir(err)
-  //
-  // // get all comments
-  // db.collection('comments').insert({}).toArray(function(err, items) {
-  //
-  //  // wrap all the points into a geojson object
-  //  var geoJsonObj = {
-  //   type:"FeatureCollection",
-  //   features:items
-  //  };
-  //
-  //  res.send(geoJsonObj);
-  //  done();
-  // });
-  //
-  //});
+  // connect to mongodb
+  db.connect("mongodb://localhost:27017/publicInvolvement", function(err, db) {
+    if(err) return console.dir(err)
 
- });
+    // get all comments
+    db.collection('comments').insert(newCommentToAdd, function(err, items) {
 
+     console.log(items);
+
+     res.sendStatus(200);
+     done();
+    });//insert
+
+  });//db-connection
+
+ });//post
 
 
 
 
 
 
+ /********************** serve pages **********************/
  /* serves main page */
  app.get("/", function(req, res) {
  	console.log(clientPath);
     res.sendFile(clientPath +'index.html');
  });
  
-  app.post("/user/add", function(req, res) {
-    /* some server side logic */
-    res.send("OK");
-  });
+
  
 
-
-
-
-
-
-
- /* serves all the static files */
- // app.get(/^(.+)$/, function(req, res){
- //     console.log('static file request : ' + req.params);
- //     res.sendfile( clientPath + req.params[0]);
- // });
  
  var port = process.env.PORT || 5000;
  app.listen(port, function() {
