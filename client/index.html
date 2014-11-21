@@ -112,6 +112,8 @@
 						// bind some angular inside the marker's popup
 						$scope.sendLocation = function(){
 
+							markerNewComment.closePopup();
+
 							var postData = new GeojsonPostObj(popupScope.popupSubject, popupScope.popupCommentText, [markerNewComment._latlng.lng,markerNewComment._latlng.lat]);
 							console.log("data to post: %o",postData);
 
