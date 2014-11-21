@@ -77,7 +77,12 @@ app.post("/api/newcomments/add", function(req, res, done){
  	console.log(clientPath);
     res.sendFile(clientPath +'index.html');
  });
- 
+
+ /* serves all the static files */
+ app.get(/^(.+)$/, function(req, res){
+      console.log('static file request : ' + req.params);
+      res.sendFile( clientPath + req.params[0]);
+ });
 
  
 

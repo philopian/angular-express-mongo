@@ -31,7 +31,6 @@
 
 	<!-- load bootstrap and fontawesome via CDN -->
 	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
 
 	<!-- load angular via CDN -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js"></script>
@@ -41,6 +40,11 @@
 	<!-- leaflet via CDN -->
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+	<!-- fonts & markers -->
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+	<link rel="stylesheet" href="./bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
+	<script src="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.min.js"></script>
 
 	<script>
 		// create the module and name it myApp
@@ -62,6 +66,8 @@
 						// once we have gotten the user's location stop locating them (save battery)
 						map.stopLocate()
 					});
+
+
 
 
 
