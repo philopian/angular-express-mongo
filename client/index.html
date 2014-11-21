@@ -34,9 +34,9 @@
 	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
 
 	<!-- load angular via CDN -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-route.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-resource.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular-route.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular-resource.min.js"></script>
 
 	<!-- leaflet via CDN -->
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
@@ -93,7 +93,7 @@
 					map.setView([45.5,-123.600], 8);// manually set the view
 
 					// HTML5 get user's location and center the map on the user
-					//map.locate({setView: true, maxZoom: 15});
+					map.locate({setView: true, maxZoom: 15});
 					map.on('locationfound',function(e){
 						console.log(e);
 						console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitute, e.longitude, e.accuracy);
@@ -142,6 +142,7 @@
 
 					// ngClick event to add a marker to the center of the map and bind some angular in the popup
 					$scope.btnAddComment = function(){
+						//TODO: close the popup when the user submits the comment
 
 						// create a dragable marker in the center of the map with a popup open
 						var mapCenterCoors = map.getCenter();
@@ -153,7 +154,6 @@
 							var postData = new GeojsonPostObj(popupScope.popupSubject, popupScope.popupCommentText, [markerNewComment._latlng.lng,markerNewComment._latlng.lat]);
 							console.log("data to post: %o",postData);
 
-
 							// Post the lat/lng to the database
 							var urlPost = "/api/newcomments/add";
 							$http.post(urlPost,postData )
@@ -163,7 +163,9 @@
 										return status;
 										if (status == 200){
 											//TODO: add this marker to the existing geojson markers ()
-											//TODO: change it's icon
+											//TODO: remove this marker
+											//
+
 										}
 									})
 									.error(function(data,status,headers,config){
@@ -179,27 +181,19 @@
 								.bindPopup(linkFunction(popupScope)[0], {minHeight : 300})
 								.addTo(map)
 								.openPopup();
-					};
+					};//ngClick post
 
-
-
-
-				});
-
-
+				});//controller
 	</script>
 </head>
 
 <!-- define angular controller -->
 <body ng-controller="MainCtrl">
 
-<div id="map"></div>
+	<div id="map"></div>
 
-<div id="buttonSec">
-	<div id="btnAddComment" class="btn btn-info" ng-click="btnAddComment()">Add a Comment</div>
-</div>
-
-
-
+	<div id="buttonSec">
+		<div id="btnAddComment" class="btn btn-info" ng-click="btnAddComment()">Add a Comment</div>
+	</div>
 </body>
 </html>
