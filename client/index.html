@@ -96,7 +96,7 @@
 					map.locate({setView: true, maxZoom: 15});
 					map.on('locationfound',function(e){
 						console.log(e);
-						console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitute, e.longitude, e.accuracy);
+						console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitude, e.longitude, e.accuracy);
 
 						// once we have gotten the user's location stop locating them (save battery)
 						map.stopLocate()
