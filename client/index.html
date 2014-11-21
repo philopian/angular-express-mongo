@@ -163,11 +163,11 @@
 						// bind some angular inside the marker's popup
 						$scope.sendLocation = function(){
 							console.log("send location: %f",markerNewComment._latlng.lat);
-							console.log(popupScope.popupCommentText);
+							console.log(popupScope.commentText);
 
 
 
-							var postData = new GeojsonPostObj(popupScope.popupSubjectText, popupScope.popupCommentText, [markerNewComment._latlng.lng,markerNewComment._latlng.lat]);
+							var postData = new GeojsonPostObj(popupScope.popupSubject, popupScope.popupCommentText, [markerNewComment._latlng.lng,markerNewComment._latlng.lat]);
 							console.log("data to post: %o",postData);
 
 
@@ -191,7 +191,7 @@
 										return status;
 									});
 						}
-						var html = '<div><div class="btn btn-success" ng-click="sendLocation()">send location</div><p>Title Here</p><input id="popupCommentText" ng-model="commentText" type="text"/></div>';
+						var html = '<div><h4>Add a Comment</h4>Subject:<input ng-model="popupSubject" type="text"/></br>Comment:<input ng-model="popupCommentText" type="text"/></br><div class="btn btn-success" ng-click="sendLocation()">send location</div></div>';
 						var linkFunction = $compile(angular.element(html));
 						var popupScope = $scope.$new();
 						markerNewComment = L.marker([mapCenterCoors.lat,mapCenterCoors.lng],{draggable:true})
