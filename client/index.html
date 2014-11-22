@@ -58,13 +58,13 @@
 
 				.controller('MainCtrl', function($scope, $compile, $http) {
 
-					// Leaflet Setup
+					//--Leaflet Setup-------
 					var map = L.map('map'); // create the map object
 					L.tileLayer('https://{s}.tiles.mapbox.com/v3/examples.map-20v6611k/{z}/{x}/{y}.png').addTo(map);//add some tiles
 					map.setView([45.52,-122.68], 11);// manually set the view
 
 					// HTML5 get user's location and center the map on the user
-					//map.locate({setView: true, maxZoom: 15});
+					map.locate({setView: true, maxZoom: 15});
 					map.on('locationfound',function(e){
 						//console.log(e);
 						console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitude, e.longitude, e.accuracy);
@@ -74,12 +74,7 @@
 					});
 
 
-
-
-//................................... map markers
-
-
-					// Creates a red marker with the coffee icon
+					//--Map Markers----------
 					var greenMarker = L.AwesomeMarkers.icon({
 						icon: 'circle',
 						markerColor: 'green'
@@ -99,10 +94,6 @@
 						iconAnchor: [16, 37],
 						popupAnchor: [0, -28]
 					});
-
-
-//...................................
-
 
 
 
@@ -125,14 +116,12 @@
 							.error(function(data,status,headers,config){
 								//console.log("...get data: %o",data);
 								//console.log("...get status: %o",status);
-
 							});
 
 
 
 
 					//--POST a marker------------
-
 					// geojson post object constructor
 					var GeojsonPostObj = function(title, textComment, lnglat){
 						this.type = "Feature";
@@ -148,7 +137,6 @@
 
 					// ngClick event to add a marker to the center of the map and bind some angular in the popup
 					$scope.btnAddComment = function(){
-						//TODO: close the popup when the user submits the comment
 
 						// create a dragable marker in the center of the map with a popup open
 						var mapCenterCoors = map.getCenter();
@@ -157,28 +145,23 @@
 						// bind some angular inside the marker's popup
 						$scope.sendLocation = function(){
 
+							// close the marker's popup when user hit the submit button
 							markerNewComment.closePopup();
-
-							var postData = new GeojsonPostObj(popupScope.popupSubject, popupScope.popupCommentText, [markerNewComment._latlng.lng,markerNewComment._latlng.lat]);
-							//console.log("data to post: %o",postData);
 
 							// Post the lat/lng to the database
 							var urlPost = "/api/newcomments/add";
+							var postData = new GeojsonPostObj(popupScope.popupSubject, popupScope.popupCommentText, [markerNewComment._latlng.lng,markerNewComment._latlng.lat]);
 							$http.post(urlPost,postData )
 									.success(function(data,status,headers,config){
-										console.log("...post status: %o",status);
-
 										if (status == 200){
+											// change the popup content and change the icon so use knows they've added it
 											markerNewComment.setIcon(blueMarkerAdded);
 											markerNewComment.setPopupContent(popupScope.popupCommentText);
-
-											console.log(".........STATUS:200 ......posted")
 										} else {
 											//TODO: remove the marker or send an error message
 										}
 									})
 									.error(function(data,status,headers,config){
-										//console.log("...post data: %o",data);
 										console.log("...post status: %o",status);
 										return status;
 									});
@@ -191,6 +174,11 @@
 								.addTo(map)
 								.openPopup();
 					};//ngClick post
+
+
+
+
+					//TODO: add a button that center's the map on the user
 
 				});//controller
 	</script>
