@@ -75,6 +75,38 @@
 
 
 
+
+//................................... map markers
+
+
+					// Creates a red marker with the coffee icon
+					var greenMarker = L.AwesomeMarkers.icon({
+						icon: 'circle',
+						markerColor: 'green'
+					});
+
+					var blueMarker = L.AwesomeMarkers.icon({
+						icon: 'circle',
+						markerColor: 'blue'
+					});
+					var blueMarkerAdded = L.AwesomeMarkers.icon({
+						icon: 'plus',
+						markerColor: 'blue'
+					});
+					var blackMarker = L.icon({
+						iconUrl: 'assets/icons/marker_black2.png',
+						iconSize: [30, 30],
+						iconAnchor: [16, 37],
+						popupAnchor: [0, -28]
+					});
+
+
+//...................................
+
+
+
+
+
 					//--GET all markers------------
 					var geojsonLayer = {};
 					var urlGet = "/api/newcomments/";
@@ -85,6 +117,7 @@
 								function onEachFeature(feature, layer,latlng) {
 									if (feature.properties) {
 										layer.bindPopup(feature.properties.comment);
+										layer.setIcon(blueMarker)
 									}
 								}
 								geojsonLayer = L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
@@ -133,11 +166,12 @@
 							var urlPost = "/api/newcomments/add";
 							$http.post(urlPost,postData )
 									.success(function(data,status,headers,config){
-										//console.log("...post data: %o",data);
 										console.log("...post status: %o",status);
-										return status;
+
 										if (status == 200){
-											// TODO: change the icon
+											markerNewComment.setIcon(blueMarkerAdded);
+											markerNewComment.setPopupContent(popupScope.popupCommentText);
+
 											console.log(".........STATUS:200 ......posted")
 										} else {
 											//TODO: remove the marker or send an error message
@@ -152,7 +186,7 @@
 						var html = '<div class="container"><h4 style="text-align: center;">Add a Comment</h4><table style="width:100%"><tr><td style="text-align: right;">Subject:</td><td><input ng-model="popupSubject" type="text"/></td></tr><tr><td style="text-align: right;">Comment:</td><td><textarea ng-model="popupCommentText" type="text" style="margin: 0px; height: 59px; width: 135px; max-height: 100px; max-width: 135px;"/></td></tr></table><div class="btn btn-success" style="width: 100%; margin-top: 7px;" ng-click="sendLocation()">send location</div></div>';
 						var linkFunction = $compile(angular.element(html));
 						var popupScope = $scope.$new();
-						markerNewComment = L.marker([mapCenterCoors.lat,mapCenterCoors.lng],{draggable:true})
+						markerNewComment = L.marker([mapCenterCoors.lat,mapCenterCoors.lng],{draggable:true,icon:greenMarker})
 								.bindPopup(linkFunction(popupScope)[0], {minHeight : 300})
 								.addTo(map)
 								.openPopup();
