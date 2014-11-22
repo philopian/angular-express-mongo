@@ -15,6 +15,10 @@
 		#map {
 			height: 100%; width:100%;
 		}
+			.awesome-marker{
+				height:10px;
+				width:10px;
+			}
 		#buttonSec{
 			padding: 20px;
 			position: fixed;
@@ -24,6 +28,7 @@
 		#btnAddComment{
 			width: 100%;
 		}
+
 	</style>
 
 	<!-- jquery via CDN -->
@@ -45,6 +50,7 @@
 	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
 	<link rel="stylesheet" href="./bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
 	<script src="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.min.js"></script>
+	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
 
 	<script>
 		// create the module and name it myApp
@@ -60,7 +66,7 @@
 					// HTML5 get user's location and center the map on the user
 					//map.locate({setView: true, maxZoom: 15});
 					map.on('locationfound',function(e){
-						console.log(e);
+						//console.log(e);
 						console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitude, e.longitude, e.accuracy);
 
 						// once we have gotten the user's location stop locating them (save battery)
@@ -69,23 +75,23 @@
 
 
 
-
-
 					//--GET all markers------------
 					var geojsonLayer = {};
 					var urlGet = "/api/newcomments/";
 					$http.get(urlGet)
 							.success(function(data,status,headers,config){
-								console.log("...get geojson data status: %o",status);
 
-								var geojsonFeature = JSON.stringify(data);
-								console.log(geojsonFeature);
-
-								geojsonLayer = L.geoJson(data, {}).addTo(map);
+								// adding geojson data you have to use an onEachFeature
+								function onEachFeature(feature, layer,latlng) {
+									if (feature.properties) {
+										layer.bindPopup(feature.properties.comment);
+									}
+								}
+								geojsonLayer = L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
 							})
 							.error(function(data,status,headers,config){
-								console.log("...get data: %o",data);
-								console.log("...get status: %o",status);
+								//console.log("...get data: %o",data);
+								//console.log("...get status: %o",status);
 
 							});
 
@@ -121,13 +127,13 @@
 							markerNewComment.closePopup();
 
 							var postData = new GeojsonPostObj(popupScope.popupSubject, popupScope.popupCommentText, [markerNewComment._latlng.lng,markerNewComment._latlng.lat]);
-							console.log("data to post: %o",postData);
+							//console.log("data to post: %o",postData);
 
 							// Post the lat/lng to the database
 							var urlPost = "/api/newcomments/add";
 							$http.post(urlPost,postData )
 									.success(function(data,status,headers,config){
-										console.log("...post data: %o",data);
+										//console.log("...post data: %o",data);
 										console.log("...post status: %o",status);
 										return status;
 										if (status == 200){
@@ -138,7 +144,7 @@
 										}
 									})
 									.error(function(data,status,headers,config){
-										console.log("...post data: %o",data);
+										//console.log("...post data: %o",data);
 										console.log("...post status: %o",status);
 										return status;
 									});
