@@ -62,16 +62,26 @@
 					var map = L.map('map'); // create the map object
 					L.tileLayer('https://{s}.tiles.mapbox.com/v3/examples.map-20v6611k/{z}/{x}/{y}.png').addTo(map);//add some tiles
 					map.setView([45.52,-122.68], 11);// manually set the view
+					//TODO: limit bounds to project area
 
-					// HTML5 get user's location and center the map on the user
-					map.locate({setView: true, maxZoom: 15});
-					map.on('locationfound',function(e){
-						//console.log(e);
-						console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitude, e.longitude, e.accuracy);
 
-						// once we have gotten the user's location stop locating them (save battery)
-						map.stopLocate()
-					});
+					//TODO: add a button that center's the map on the user ( ion-ios7-navigate-outline == default icon  )
+					$scope.getUserLocation = function () {
+
+						//TODO: change the icon to .ion-loading-c ==> while getting user location
+						// HTML5 get user's location and center the map on the user
+						map.locate({setView: true, maxZoom: 15});
+						map.on('locationfound',function(e){
+							//console.log(e);
+							console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitude, e.longitude, e.accuracy);
+
+							//TODO: .ion-ios7-navigate-outline ==> to get current location
+
+							// once we have gotten the user's location stop locating them (save battery)
+							map.stopLocate()
+						});
+					};
+
 
 
 					//--Map Markers----------
@@ -111,6 +121,8 @@
 										layer.setIcon(blueMarker)
 									}
 								}
+
+								//TODO: add marker cluster to the map https://github.com/Leaflet/Leaflet.markercluster/blob/master/example/geojson.html
 								geojsonLayer = L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
 							})
 							.error(function(data,status,headers,config){
@@ -158,12 +170,13 @@
 											markerNewComment.setIcon(blueMarkerAdded);
 											markerNewComment.setPopupContent(popupScope.popupCommentText);
 										} else {
-											//TODO: remove the marker or send an error message
+											//TODO: send a error warning "the comment didn't post"
 										}
 									})
 									.error(function(data,status,headers,config){
 										console.log("...post status: %o",status);
-										return status;
+
+										//TODO: send a error warning "the comment didn't post"
 									});
 						}
 						var html = '<div class="container"><h4 style="text-align: center;">Add a Comment</h4><table style="width:100%"><tr><td style="text-align: right;">Subject:</td><td><input ng-model="popupSubject" type="text"/></td></tr><tr><td style="text-align: right;">Comment:</td><td><textarea ng-model="popupCommentText" type="text" style="margin: 0px; height: 59px; width: 135px; max-height: 100px; max-width: 135px;"/></td></tr></table><div class="btn btn-success" style="width: 100%; margin-top: 7px;" ng-click="sendLocation()">send location</div></div>';
@@ -178,8 +191,6 @@
 
 
 
-					//TODO: add a button that center's the map on the user
-
 				});//controller
 	</script>
 </head>
@@ -190,6 +201,7 @@
 	<div id="map"></div>
 
 	<div id="buttonSec">
+		<div class="btn btn-info" ng-click="getUserLocation()">get user location</div>
 		<div id="btnAddComment" class="btn btn-info" ng-click="btnAddComment()">Add a Comment</div>
 	</div>
 
