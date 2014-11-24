@@ -1,0 +1,22 @@
+{
+  "name": "PublicInvolvement_Simple",
+  "version": "0.0.0",
+  "authors": [
+    "C Foster <cfoster@hdrinc.com>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "leaflet": "~0.7.3",
+    "Leaflet.awesome-markers": "~2.0.2"
+  }
+}
