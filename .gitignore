@@ -1,4 +1,5 @@
 client/bower_components
+bower_components
 server/node_modules
 .idea
 .hg
