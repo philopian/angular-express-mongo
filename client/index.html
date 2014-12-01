@@ -36,7 +36,7 @@
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 
 	<!-- bootstrap -->
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
 
 	<!-- load angular -->
 	<script src="bower_components/angularjs/angular.min.js"></script>
@@ -64,10 +64,19 @@
 					//TODO: limit bounds to project area
 
 
+
 					//TODO: add a button that center's the map on the user ( ion-ios7-navigate-outline == default icon  )
+
+
+
+
 					$scope.getUserLocation = function () {
 
 						//TODO: change the icon to .ion-loading-c ==> while getting user location
+
+
+
+
 						// HTML5 get user's location and center the map on the user
 						map.locate({setView: true, maxZoom: 15});
 						map.on('locationfound',function(e){
@@ -75,6 +84,8 @@
 							console.log("FOUND!! lat: %f, lng: %f, accuracy:%f",e.latitude, e.longitude, e.accuracy);
 
 							//TODO: .ion-ios7-navigate-outline ==> to get current location
+
+
 
 							// once we have gotten the user's location stop locating them (save battery)
 							map.stopLocate()
